@@ -129,6 +129,7 @@ def parse_settings(root_path):
                         help='Minimum number of seconds remaining on a pokemon to send a notify')
     parser.add_argument('-tz', '--timezone', type=str, action='append', default=[None],
                         help='Timezone used for notifications.  Ex: "America/Los_Angeles"')
+    parser.add_argument('-q', '--quiet', help='Quiet Mode', action='store_true', default=False)
 
     args = parser.parse_args()
 
@@ -142,7 +143,8 @@ def parse_settings(root_path):
     config['HOST'] = args.host
     config['PORT'] = args.port
     config['DEBUG'] = args.debug
-
+    config['QUIET'] = args.quiet	
+	
     # Check to make sure that the same number of arguements are included
     for list_ in [args.key, args.filters, args.alarms, args.geofences, args.location,
                   args.locale, args.units, args.timelimit, args.timezone]:
@@ -179,7 +181,7 @@ def parse_settings(root_path):
             units=args.units[m_ct] if len(args.units) > 1 else args.units[0],
             timezone=args.timezone[m_ct] if len(args.timezone) > 1 else args.timezone[0],
             time_limit=args.timelimit[m_ct] if len(args.timelimit) > 1 else args.timelimit[0],
-            quiet=False,  # TODO: I'll totally document this some day. Promise.
+            quiet=config['QUIET'],  # Silent mode.
             location=args.location[m_ct] if len(args.location) > 1 else args.location[0],
             filter_file=args.filters[m_ct] if len(args.filters) > 1 else args.filters[0],
             geofence_file=args.geofences[m_ct] if len(args.geofences) > 1 else args.geofences[0],
